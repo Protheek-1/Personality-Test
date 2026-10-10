@@ -46,20 +46,20 @@ question_list = [
     {
         'question': 'Whats your favourite animal?',
         'answers': [
-            {'text':'Cat', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Dog', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Horse', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Fish', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Cat', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
+            {'text':'Dog', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Horse', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}},
+            {'text':'Fish', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
         ]
     },
 
     {
         'question': 'Whos your favourite Terra NPC?',
         'answers': [
-            {'text':'Poobert', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Ratticus', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Heidi', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Blargh', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Poobert', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
+            {'text':'Ratticus', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Heidi', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}},
+            {'text':'Blargh', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
         
         ]
     },
@@ -67,20 +67,20 @@ question_list = [
     {
         'question': 'Do you like your terra?',
         'answers': [
-            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Love it!', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}},
+            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
+            {'text':'YHHH', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Sure', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
         ]
     },
 
     {
         'question': 'Whats your fav coding language?',
         'answers': [
-            {'text':'Python', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Java', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'C#', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'C++', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Python', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
+            {'text':'Javascript', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}},
+            {'text':'HTML', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
+            {'text':'C++', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
         ]
     }
 
