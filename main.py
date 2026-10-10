@@ -2,39 +2,38 @@ import pygame # imma try make this in pygame
 import sys
 import math
 
-#setup
+#setup for window
 pygame.init()
 screen = pygame.display.set_mode ((1200,800))
 pygame.display.set_caption("Personality Test")
 clock = pygame.time.Clock()
 
-
-game_title = "TITLE"
-# question_1 = False
+#start variables 
+game_state = "TITLE"
 running = True
-
-points_red = 0
-points_blue = 0
-points_green = 0
-points_yellow = 0
-
+current_question_index = 0
+score = {
+    'red' : 0,
+    'blue' : 0,
+    'green' : 0,
+    'yellow' : 0
+}
+# font setup
 title_font = pygame.font.Font('fonts/gorditas.ttf', 120)
-subtitle_font = pygame.font.Font('fonts/gorditas.ttf', 70)
-question_font = pygame.font.Font('fonts/gorditas.ttf', 50)
+subtitle_font = pygame.font.Font('fonts/gorditas.ttf', 63)
+answer_font = pygame.font.Font('fonts/gorditas.ttf', 50)
 
-#surfaces rest will be generated during the game 
+# only text that isnt autoamticlaly generated  
 title_surf = title_font.render("Personality Test", True, (255,255,255))
 title_rect = title_surf.get_rect(center=(600,300))
-
-message_surf = question_font.render("(press space to start)", True, (255,255,255))
+message_surf = answer_font.render("(press space to start)", True, (255,255,255))
 message_rect = message_surf.get_rect(center=(600,510))
 
 
-#questions
-
+#questions for quiz, as many as u want
 question_list = [
     {
-        'question': 'Whats your favourite colour', 
+        'question': 'Whats your favourite colour?', 
         'answers': [
             {'text':'Red', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
             {'text':'Blue', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
@@ -44,7 +43,7 @@ question_list = [
     },
 
     {
-        'question': 'Whats your favourite animal',
+        'question': 'Whats your favourite animal?',
         'answers': [
             {'text':'Cat', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
             {'text':'Dog', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
@@ -75,7 +74,7 @@ question_list = [
     },
 
     {
-        'question': 'Whats your favourite coding language?',
+        'question': 'Whats your fav coding language?',
         'answers': [
             {'text':'Python', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
             {'text':'Java', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
@@ -87,43 +86,13 @@ question_list = [
 ]
 
 
-class question:
-    def __init__(self, question_text, answer_1, answer_2, answer_3, answer_4):
-        self.question_text = question_text
-        self.answer_1 = answer_1
-        self.answer_2 = answer_2
-        self.answer_3 = answer_3
-        self.answer_4 = answer_4
-
-    def select_answer(self, answerChoice):
-        global personality_score_red, personality_score_blue, personality_score_green, personality_score_yellow
-        if answerChoice == self.answer_1:
-            personality_score_red += 1
-        elif answerChoice == self.answer_2:
-            personality_score_blue += 1
-        elif answerChoice == self.answer_3:
-            personality_score_green += 1
-        elif answerChoice == self.answer_4:
-            personality_score_yellow += 1
-
-    def get_question_text(self):
-        return self.question_text
-
-    def get_answerList(self):
-        return [self.answer_1, self.answer_2, self.answer_3, self.answer_4]
-
-question1 = question("Q1. Whats your favorite color?", "red", "blue", "green", "yellow")
-question2 = question("Q2. Whats your favorite animal?", "cat", "dog", "horse", "fish")
-question3 = question("Q3. Whats your favorite food?", "pizza", "ice cream", "burger", "sushi")
-question4 = question("Q4. Whats your favorite drink?", "coffee", "tea", "beer", "water")
-
-#title page bg
-def bg():
+#title page bg function means i can minimise it makes code look cleaner
+def bg(r, g, b):
     tri_width = 140
     tri_height = int(tri_width * (math.sqrt(3)/2))
     corner_radius = 16
     gap = 80
-    tri_colour = (250, 160, 170)
+    tri_colour = (r, g, b)
 
     triangle_surf = pygame.Surface((tri_width, tri_height), pygame.SRCALPHA)
     p1 = (tri_width // 2, corner_radius)
@@ -147,88 +116,78 @@ def bg():
                     else:
                         # y_offset = tri_height // 3 - (gap // 4)
                         screen.blit(triangle_flipped_surf, (x, y + y_spacing // 2))
-    return screen
+    return screen #not sure if i need this but i donesnt do anything rn
     
     
+# functions to automactically generate the ui for the quiz based on what question we are on
+def current_quiz_ui(index):
+    q_data = question_list[index]
+    q_surf = subtitle_font.render(q_data['question'], True, (255,255,255))
+    q_rect = q_surf.get_rect(center=(600,150))
 
-def createSurfaces(question):
-    title_surf_local = title_font.render("Personality Test", True, (255,255,255))
-    title_rect_local = title_surf_local.get_rect(center=(600,300))
+    positions = [(300,380), (900,380), (300,600), (900,600)]
+    answers_surf = []
+    answers_rect = []
 
-    message_surf_local = question_font.render("(press space to start)", True, (255,255,255))
-    message_rect_local = message_surf_local.get_rect(center=(600,550))
-
-    question_1_surf_local = subtitle_font.render(question.get_question_text(), True, (255,255,255))
-    question_1_rect_local = question_1_surf_local.get_rect(center=(600,120))
-
-    answer_1_surf = question_font.render(question.get_answerList()[0], True, (255,255,255))
-    answer_1_rect = answer_1_surf.get_rect(center=(300,310))
-    answer_2_surf = question_font.render(question.get_answerList()[1], True, (255,255,255))
-    answer_2_rect = answer_2_surf.get_rect(center=(900,310))
-    answer_3_surf = question_font.render(question.get_answerList()[2], True, (255,255,255))
-    answer_3_rect = answer_3_surf.get_rect(center=(300,590))
-    answer_4_surf = question_font.render(question.get_answerList()[3], True, (255,255,255))
-    answer_4_rect = answer_4_surf.get_rect(center=(900,590))
+    for i, ans in enumerate(q_data['answers']):
+        surf = answer_font.render(ans['text'], True, (255,255,255))
+        rect = surf.get_rect(center=positions[i])
+        answers_surf.append(surf)
+        answers_rect.append(rect)
 
     return (
-        title_surf_local,
-        title_rect_local,
-        message_surf_local,
-        message_rect_local,
-        question_1_surf_local,
-        question_1_rect_local,
-        answer_1_surf,
-        answer_1_rect,
-        answer_2_surf,
-        answer_2_rect,
-        answer_3_surf,
-        answer_3_rect,
-        answer_4_surf,
-        answer_4_rect,
+        q_surf,
+        q_rect,
+        answers_surf,
+        answers_rect,
     )
 
-
+# actual main game loop
 while running:
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                game_title = False
-                question_1 = True
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     if question_1_1_rect.collidepoint(event.pos):
-        #         pass # will eventually add an amount of personality points and  move to next question
-        #     elif question_1_2_rect.collidepoint(event.pos):
-        #         pass
-        #     elif question_1_3_rect.collidepoint(event.pos):
-        #         pass
-        #     elif question_1_4_rect.collidepoint(event.pos):
-        #         pass
-    
-
-   
+                game_state = "QUIZ"
+                current_question_index = 0
+                score = {k: 0 for k in score}
+        # need to add mouse collision detection
+        if event.type == pygame.MOUSEBUTTONDOWN and game_state == "QUIZ":
+            _,_,_, ans_rect = current_quiz_ui(current_question_index)
+            for i, rect in enumerate(ans_rect):
+                if rect.collidepoint(event.pos):
+                    answer_points = question_list[current_question_index]['answers'][i]['points']
+                    for colour in score:
+                        score[colour] += answer_points.get(colour, 0)
+                    if current_question_index < len(question_list) - 1:
+                        current_question_index += 1
+                    else:
+                        game_state = "RESULTS"
+                    break
     current_time = pygame.time.get_ticks()
-    
-    if game_title == "TITLE": # title screen
+
+    # code for each state, will automatically cycle through after each event
+    if game_state == "TITLE": # title screen  
         screen.fill((250,170,180))
-
-        bg()
-
+        bg(250, 160, 170)
         screen.blit(title_surf, title_rect)
-        if current_time >= 850:  # if the time is past 1 s and then half the time the message is on, half the time its not
+        if current_time >= 850:  # (blinking text)if the time is past 1 s and then half the time the message is on, half the time its not
             if current_time % 1700 < 850:
                 screen.blit(message_surf, message_rect)
 
-    elif question_1 == True: 
-        screen.fill((180,110,110))
-        question_surfaces = createSurfaces(question1)
-        screen.blit(question_surfaces[4], question_surfaces[5])
-        screen.blit(question_surfaces[6], question_surfaces[7])
-        screen.blit(question_surfaces[8], question_surfaces[9])
-        screen.blit(question_surfaces[10], question_surfaces[11])
-        screen.blit(question_surfaces[12], question_surfaces[13])
+    elif game_state == "QUIZ":
+        screen.fill((170,200,250)) # might make a different colour for each question and make custom bg
+        bg(164, 194, 250)
+        q_surf, q_rect, ans_surf, ans_rect = current_quiz_ui(current_question_index)
+        screen.blit(q_surf, q_rect)
+        for surf, rect in zip(ans_surf, ans_rect):
+            pygame.draw.rect(screen, (255,255,255), rect.inflate(30, 20), width=5, border_radius=10)
+            screen.blit(surf, rect)
+
+    elif game_state == "RESULTS":
+        pass #placeholder
 
     pygame.display.update()
     clock.tick(60)
