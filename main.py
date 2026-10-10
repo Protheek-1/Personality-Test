@@ -1,6 +1,7 @@
 import pygame # imma try make this in pygame
 import sys
 import math
+import random
 
 #setup for window
 pygame.init()
@@ -30,36 +31,59 @@ title_rect = title_surf.get_rect(center=(600,300))
 message_surf = answer_font.render("(press space to start)", True, (255,255,255))
 message_rect = message_surf.get_rect(center=(600,510))
 
+#harecter list
+character_list = {
+    'red': {
+        'name': 'Ratticus',
+        'desc': '',
+        'bg_base': (240, 140, 140), 'bg_tri': (240, 130, 130)
+    },
+    'blue': {
+        'name': 'Blargh',
+        'desc': '',
+        'bg_base': (140, 150, 250), 'bg_tri': (130, 140, 250)
+    },
+    'green': {
+        'name': 'Poobert',
+        'desc': '',
+        'bg_base': (180, 240, 160), 'bg_tri': (160, 230, 140)
+    },
+    'yellow': {
+        'name': 'Heidi',
+        'desc': '',
+        'bg_base': (240, 240, 160), 'bg_tri': (240, 240, 120)
+    }
+}
 
 #questions for quiz, as many as u want
 question_list = [
     {
         'question': 'Whats your favourite colour?', 
         'answers': [
-            {'text':'Red', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Blue', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
-            {'text':'Green', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
-            {'text':'Yellow', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}}
+            {'text':'Red', 'points': {'red' : 4, 'blue' : 2, 'green' : 1, 'yellow' : 3}},
+            {'text':'Blue', 'points': {'red' : 2, 'blue' : 4, 'green' : 3, 'yellow' : 1}},
+            {'text':'Green', 'points': {'red' : 1, 'blue' : 3, 'green' : 4, 'yellow' : 2}},
+            {'text':'Yellow', 'points': {'red' : 3, 'blue' : 1, 'green' : 2, 'yellow' : 4}}
         ]
     },
 
     {
         'question': 'Whats your favourite animal?',
         'answers': [
-            {'text':'Cat', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
-            {'text':'Dog', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Horse', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}},
-            {'text':'Fish', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
+            {'text':'Cat', 'points': {'red' : 2, 'blue' : 2, 'green' : 3, 'yellow' : 4}},
+            {'text':'Dog', 'points': {'red' : 4, 'blue' : 2, 'green' : 1, 'yellow' : 3}},
+            {'text':'Horse', 'points': {'red' : 3, 'blue' : 2, 'green' : 4, 'yellow' : 1}},
+            {'text':'Fish', 'points': {'red' : 1, 'blue' : 4, 'green' : 3, 'yellow' : 2}},
         ]
     },
 
     {
         'question': 'Whos your favourite Terra NPC?',
         'answers': [
-            {'text':'Poobert', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
-            {'text':'Ratticus', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Heidi', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}},
-            {'text':'Blargh', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
+            {'text':'Poobert', 'points': {'red' : 1, 'blue' : 3, 'green' : 4, 'yellow' : 2}},
+            {'text':'Ratticus', 'points': {'red' : 4, 'blue' : 1, 'green' : 2, 'yellow' : 3}},
+            {'text':'Heidi', 'points': {'red' : 2, 'blue' : 3, 'green' : 1, 'yellow' : 4}},
+            {'text':'Blargh', 'points': {'red' : 2, 'blue' : 4, 'green' : 1, 'yellow' : 3}},
         
         ]
     },
@@ -67,20 +91,20 @@ question_list = [
     {
         'question': 'Do you like your terra?',
         'answers': [
-            {'text':'Love it!', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}},
-            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
-            {'text':'YHHH', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {'text':'Sure', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
+            {'text':'Love it!', 'points': {'red' : 3, 'blue' : 1, 'green' : 3, 'yellow' : 4}},
+            {'text':'Yes', 'points': {'red' : 2, 'blue' : 3, 'green' : 4, 'yellow' : 1}},
+            {'text':'YHHH', 'points': {'red' : 4, 'blue' : 1, 'green' : 1, 'yellow' : 3}},
+            {'text':'Sure', 'points': {'red' : 1, 'blue' : 4, 'green' : 3, 'yellow' : 0}},
         ]
     },
 
     {
         'question': 'Whats your fav coding language?',
         'answers': [
-            {'text':'Python', 'points': {'red' : 0, 'blue' : 0, 'green' : 1, 'yellow' : 0}},
-            {'text':'Javascript', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 1}},
-            {'text':'HTML', 'points': {'red' : 0, 'blue' : 1, 'green' : 0, 'yellow' : 0}},
-            {'text':'C++', 'points': {'red' : 1, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Python', 'points': {'red' : 2, 'blue' : 2, 'green' : 4, 'yellow' : 3}},
+            {'text':'Javascript', 'points': {'red' : 3, 'blue' : 3, 'green' : 3, 'yellow' : 4}},
+            {'text':'HTML', 'points': {'red' : 2, 'blue' : 4, 'green' : 1, 'yellow' : 1}},
+            {'text':'C++', 'points': {'red' : 4, 'blue' : 1, 'green' : 2, 'yellow' : 2}},
         ]
     }
 
@@ -152,9 +176,10 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                game_state = "QUIZ"
-                current_question_index = 0
-                score = {k: 0 for k in score}
+                if game_state == "TITLE" or game_state == "RESULTS":
+                    game_state = "QUIZ"
+                    current_question_index = 0
+                    score = {k: 0 for k in score}
         # need to add mouse collision detection
         if event.type == pygame.MOUSEBUTTONDOWN and game_state == "QUIZ":
             _,_,_, ans_rect = current_quiz_ui(current_question_index)
@@ -202,7 +227,21 @@ while running:
         
 
     elif game_state == "RESULTS":
-        pass #placeholder
+        highets_score = max(score.values())
+        tied_winners = [colour for colour, value in score.items() if value == highets_score]
+        winner_colour = random.choice(tied_winners)
+        char = character_list[winner_colour]
+        screen.fill(char['bg_base'])
+        bg(*char['bg_tri'])
+
+        name_surf = title_font.render(char['name'], True, (255,255,255))
+        name_rect = name_surf.get_rect(center=(600,100))
+
+        desc_surf = answer_font.render(char['desc'], True, (255,255,255))
+        desc_rect = desc_surf.get_rect(center=(600,650))
+
+        screen.blit(name_surf, name_rect)
+        screen.blit(desc_surf, desc_rect)
 
     pygame.display.update()
     clock.tick(60)
