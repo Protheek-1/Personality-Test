@@ -47,11 +47,42 @@ question_list = [
         'question': 'Whats your favourite animal',
         'answers': [
             {'text':'Cat', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
-            {},
-            {},
-            {},
+            {'text':'Dog', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Horse', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Fish', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
         ]
     },
+
+    {
+        'question': 'Whos your favourite Terra NPC?',
+        'answers': [
+            {'text':'Poobert', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Ratticus', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Heidi', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Blargh', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+        
+        ]
+    },
+
+    {
+        'question': 'Do you like your terra?',
+        'answers': [
+            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Yes', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+        ]
+    },
+
+    {
+        'question': 'Whats your favourite coding language?',
+        'answers': [
+            {'text':'Python', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'Java', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'C#', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+            {'text':'C++', 'points': {'red' : 0, 'blue' : 0, 'green' : 0, 'yellow' : 0}},
+        ]
+    }
 
 ]
 
