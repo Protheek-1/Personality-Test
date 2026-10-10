@@ -22,6 +22,7 @@ score = {
 title_font = pygame.font.Font('fonts/gorditas.ttf', 120)
 subtitle_font = pygame.font.Font('fonts/gorditas.ttf', 63)
 answer_font = pygame.font.Font('fonts/gorditas.ttf', 50)
+answer_hover_font = pygame.font.Font('fonts/gorditas.ttf', 56)
 
 # only text that isnt autoamticlaly generated  
 title_surf = title_font.render("Personality Test", True, (255,255,255))
@@ -144,6 +145,7 @@ def current_quiz_ui(index):
 
 # actual main game loop
 while running:
+    mouse_pos = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -157,7 +159,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and game_state == "QUIZ":
             _,_,_, ans_rect = current_quiz_ui(current_question_index)
             for i, rect in enumerate(ans_rect):
-                if rect.collidepoint(event.pos):
+                if rect.inflate(40,20).collidepoint(event.pos):
                     answer_points = question_list[current_question_index]['answers'][i]['points']
                     for colour in score:
                         score[colour] += answer_points.get(colour, 0)
@@ -182,9 +184,22 @@ while running:
         bg(164, 194, 250)
         q_surf, q_rect, ans_surf, ans_rect = current_quiz_ui(current_question_index)
         screen.blit(q_surf, q_rect)
-        for surf, rect in zip(ans_surf, ans_rect):
-            pygame.draw.rect(screen, (255,255,255), rect.inflate(30, 20), width=5, border_radius=10)
-            screen.blit(surf, rect)
+
+        for i, (surf, rect) in enumerate(zip(ans_surf, ans_rect)):
+            if rect.inflate(40,20).collidepoint(mouse_pos):
+                inflate_x, inflate_y = 70,40
+                box_thickness = 7
+                text_string = question_list[current_question_index]['answers'][i]['text']
+                dispay_surf = answer_hover_font.render(text_string, True, (255,255,255))
+                display_rect = dispay_surf.get_rect(center=rect.center)
+            else:
+                inflate_x, inflate_y = 40,20
+                box_thickness = 5
+                dispay_surf = surf
+                display_rect = rect
+            pygame.draw.rect(screen, (255,255,255), rect.inflate(inflate_x, inflate_y), width=box_thickness, border_radius=10)
+            screen.blit(dispay_surf, display_rect)
+        
 
     elif game_state == "RESULTS":
         pass #placeholder
