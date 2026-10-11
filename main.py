@@ -20,7 +20,7 @@ score = {
     'green' : 0,
     'yellow' : 0
 }
-TARGET_HEIGHT = 420
+TARGET_HEIGHT = 420 # for charectar images max height for scaling
 
 # font setup
 title_font = pygame.font.Font('fonts/gorditas.ttf', 120)
@@ -38,7 +38,7 @@ reload_img = pygame.image.load('graphics/reload.png').convert_alpha()
 reload_img = pygame.transform.scale(reload_img, (100,100))
 reload_rect = reload_img.get_rect(topright=(1159,60))
 
-#character list
+#character list, name, description, background colours and image
 character_list = {
     'red': {
         'name': 'Ratticus',
@@ -66,7 +66,7 @@ character_list = {
     }
 }
 
-#questions for quiz, as many as u want
+#questions for quiz, as many as u want, quesstion, answer, points, background colours
 question_list = [
     {
         'question': 'Whats your favourite colour?', 
@@ -286,19 +286,22 @@ while running:
         img_rect = img_surf.get_rect(center=(600,380))
         screen.blit(img_surf, img_rect)
 
+        # relaod button collide detection
         if reload_rect.collidepoint(mouse_pos):
             hover_img = pygame.transform.scale(reload_img, (116,116))
             hover_rect = hover_img.get_rect(center=reload_rect.center)
             screen.blit(hover_img, hover_rect)
         else:
             screen.blit(reload_img, reload_rect)
-        
+
+        #for text wrapping
         start_y = 620
         line_height = 60
 
         for i, single_line in enumerate(wrapped_desc_lines):
             line_rect = single_line.get_rect(center=(600,start_y + (i * line_height)))
             screen.blit(single_line, line_rect)
+
     pygame.display.update()
     clock.tick(60)
 
