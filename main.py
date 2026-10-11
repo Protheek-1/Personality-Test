@@ -51,7 +51,7 @@ character_list = {
     'yellow': {
         'name': 'Heidi',
         'desc': '',
-        'bg_base': (240, 240, 160), 'bg_tri': (240, 240, 120)
+        'bg_base': (235, 230, 160), 'bg_tri': (230, 220, 120)
     }
 }
 
@@ -64,7 +64,8 @@ question_list = [
             {'text':'Blue', 'points': {'red' : 2, 'blue' : 4, 'green' : 3, 'yellow' : 1}},
             {'text':'Green', 'points': {'red' : 1, 'blue' : 3, 'green' : 4, 'yellow' : 2}},
             {'text':'Yellow', 'points': {'red' : 3, 'blue' : 1, 'green' : 2, 'yellow' : 4}}
-        ]
+        ],
+        'bg_base': (240, 140, 140), 'bg_tri': (240, 130, 130)
     },
 
     {
@@ -74,7 +75,8 @@ question_list = [
             {'text':'Dog', 'points': {'red' : 4, 'blue' : 2, 'green' : 1, 'yellow' : 3}},
             {'text':'Horse', 'points': {'red' : 3, 'blue' : 2, 'green' : 4, 'yellow' : 1}},
             {'text':'Fish', 'points': {'red' : 1, 'blue' : 4, 'green' : 3, 'yellow' : 2}},
-        ]
+        ],
+        'bg_base': (235, 230, 160), 'bg_tri': (230, 220, 120)
     },
 
     {
@@ -85,7 +87,8 @@ question_list = [
             {'text':'Heidi', 'points': {'red' : 2, 'blue' : 3, 'green' : 1, 'yellow' : 4}},
             {'text':'Blargh', 'points': {'red' : 2, 'blue' : 4, 'green' : 1, 'yellow' : 3}},
         
-        ]
+        ],
+        'bg_base': (180, 240, 160), 'bg_tri': (160, 230, 140)
     },
 
     {
@@ -95,7 +98,8 @@ question_list = [
             {'text':'Yes', 'points': {'red' : 2, 'blue' : 3, 'green' : 4, 'yellow' : 1}},
             {'text':'YHHH', 'points': {'red' : 4, 'blue' : 1, 'green' : 1, 'yellow' : 3}},
             {'text':'Sure', 'points': {'red' : 1, 'blue' : 4, 'green' : 3, 'yellow' : 0}},
-        ]
+        ],
+        'bg_base': (140, 150, 250), 'bg_tri': (130, 140, 250)
     },
 
     {
@@ -105,7 +109,8 @@ question_list = [
             {'text':'Javascript', 'points': {'red' : 3, 'blue' : 3, 'green' : 3, 'yellow' : 4}},
             {'text':'HTML', 'points': {'red' : 2, 'blue' : 4, 'green' : 1, 'yellow' : 1}},
             {'text':'C++', 'points': {'red' : 4, 'blue' : 1, 'green' : 2, 'yellow' : 2}},
-        ]
+        ],
+        'bg_base': (170,200,250), 'bg_tri': (164, 194, 250)
     }
 
 ]
@@ -205,8 +210,8 @@ while running:
                 screen.blit(message_surf, message_rect)
 
     elif game_state == "QUIZ":
-        screen.fill((170,200,250)) # might make a different colour for each question and make custom bg
-        bg(164, 194, 250)
+        screen.fill(question_list[current_question_index]['bg_base']) # might make a different colour for each question and make custom bg
+        bg(*question_list[current_question_index]['bg_tri'])
         q_surf, q_rect, ans_surf, ans_rect = current_quiz_ui(current_question_index)
         screen.blit(q_surf, q_rect)
 
@@ -215,8 +220,9 @@ while running:
                 inflate_x, inflate_y = 70,40
                 box_thickness = 7
                 text_string = question_list[current_question_index]['answers'][i]['text']
-                dispay_surf = answer_hover_font.render(text_string, True, (255,255,255))
+                display_surf = answer_hover_font.render(text_string, True, (255,255,255))
                 display_rect = dispay_surf.get_rect(center=rect.center)
+
             else:
                 inflate_x, inflate_y = 40,20
                 box_thickness = 5
