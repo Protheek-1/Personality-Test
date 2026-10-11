@@ -32,6 +32,10 @@ title_rect = title_surf.get_rect(center=(600,300))
 message_surf = answer_font.render("(press space to start)", True, (255,255,255))
 message_rect = message_surf.get_rect(center=(600,510))
 
+reload_img = pygame.image.load('graphics/reload.png').convert_alpha()
+reload_img = pygame.transform.scale(reload_img, (100,100))
+reload_rect = reload_img.get_rect(topright=(1159,60))
+
 #character list
 character_list = {
     'red': {
@@ -200,30 +204,36 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if game_state == "TITLE" or game_state == "RESULTS":
+                if game_state == "TITLE":
                     game_state = "QUIZ"
                     current_question_index = 0
                     score = {k: 0 for k in score}
+                elif game_state == "RESULTS":
+                    game_state = "TITLE"
         # need to add mouse collision detection
-        if event.type == pygame.MOUSEBUTTONDOWN and game_state == "QUIZ":
-            _,_,_, ans_rect = current_quiz_ui(current_question_index)
-            for i, rect in enumerate(ans_rect):
-                if rect.inflate(40,20).collidepoint(event.pos):
-                    answer_points = question_list[current_question_index]['answers'][i]['points']
-                    for colour in score:
-                        score[colour] += answer_points.get(colour, 0)
-                    if current_question_index < len(question_list) - 1:
-                        current_question_index += 1
-                    else:
-                        game_state = "RESULTS"
-                        highets_score = max(score.values())
-                        tied_winners = [colour for colour, value in score.items() if value == highets_score]
-                        winner_colour = random.choice(tied_winners)
-                        char = character_list[winner_colour]
-                        current_winner = char
-                        wrapped_desc_lines = render_wrapped_text(char['desc'], answer_font, (255,255,255), 1000)
+        if event.type == pygame.MOUSEBUTTONDOWN: 
+            if game_state == "QUIZ":
+                _,_,_, ans_rect = current_quiz_ui(current_question_index)
+                for i, rect in enumerate(ans_rect):
+                    if rect.inflate(40,20).collidepoint(event.pos):
+                        answer_points = question_list[current_question_index]['answers'][i]['points']
+                        for colour in score:
+                            score[colour] += answer_points.get(colour, 0)
+                        if current_question_index < len(question_list) - 1:
+                            current_question_index += 1
+                        else:
+                            game_state = "RESULTS"
+                            highets_score = max(score.values())
+                            tied_winners = [colour for colour, value in score.items() if value == highets_score]
+                            winner_colour = random.choice(tied_winners)
+                            char = character_list[winner_colour]
+                            current_winner = char
+                            wrapped_desc_lines = render_wrapped_text(char['desc'], answer_font, (255,255,255), 1000)
+                        break
+            elif game_state == "RESULTS":
+                if reload_rect.inflate(20,20).collidepoint(event.pos):
+                    game_state = "TITLE"
 
-                    break
     current_time = pygame.time.get_ticks()
 
     # code for each state, will automatically cycle through after each event
@@ -231,7 +241,7 @@ while running:
         screen.fill((250,170,180))
         bg(250, 160, 170)
         screen.blit(title_surf, title_rect)
-        if current_time >= 850:  # (blinking text)if the time is past 1 s and then half the time the message is on, half the time its not
+        if current_time >= 0:  # (blinking text)if the time is past 1 s and then half the time the message is on, half the time its not
             if current_time % 1700 < 850:
                 screen.blit(message_surf, message_rect)
 
@@ -267,6 +277,12 @@ while running:
         name_rect = name_surf.get_rect(center=(600,100))
         screen.blit(name_surf, name_rect)
 
+        if reload_rect.collidepoint(mouse_pos):
+            hover_img = pygame.transform.scale(reload_img, (116,116))
+            hover_rect = hover_img.get_rect(center=reload_rect.center)
+            screen.blit(hover_img, hover_rect)
+        else:
+            screen.blit(reload_img, reload_rect)
         
         start_y = 620
         line_height = 60
