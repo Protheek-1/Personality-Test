@@ -13,6 +13,7 @@ clock = pygame.time.Clock()
 game_state = "TITLE"
 running = True
 current_question_index = 0
+wrapped_desc_lines = []
 score = {
     'red' : 0,
     'blue' : 0,
@@ -31,26 +32,26 @@ title_rect = title_surf.get_rect(center=(600,300))
 message_surf = answer_font.render("(press space to start)", True, (255,255,255))
 message_rect = message_surf.get_rect(center=(600,510))
 
-#harecter list
+#character list
 character_list = {
     'red': {
         'name': 'Ratticus',
-        'desc': '',
+        'desc': "Fueled entirely by midnight coffee and chaos, they push buttons just to see sparks.",
         'bg_base': (240, 140, 140), 'bg_tri': (240, 130, 130)
     },
     'blue': {
         'name': 'Blargh',
-        'desc': '',
+        'desc': 'There are zero thoughts behind those eyes, just baseline survival instincts and immaculate vibes.',
         'bg_base': (140, 150, 250), 'bg_tri': (130, 140, 250)
     },
     'green': {
         'name': 'Poobert',
-        'desc': '',
+        'desc': 'The sensible anchor holding the group together while everyone else creates absolute mayhem.',
         'bg_base': (180, 240, 160), 'bg_tri': (160, 230, 140)
     },
     'yellow': {
         'name': 'Heidi',
-        'desc': '',
+        'desc': 'An unstoppable force of positive energy who treats the whole world like a playground.',
         'bg_base': (235, 230, 160), 'bg_tri': (230, 220, 120)
     }
 }
@@ -172,6 +173,24 @@ def current_quiz_ui(index):
         answers_rect,
     )
 
+# text wrapping function for the descriptions
+def render_wrapped_text(text, font, colour, max_width):
+    words = text.split(' ')
+    lines = []
+    current_line = []
+
+    for word in words:
+        test_line = ' '.join(current_line + [word])
+        if font.size(test_line)[0] <= max_width:
+            current_line.append(word)
+        else:
+            lines.append(' '.join(current_line))
+            current_line = [word]
+    if current_line:
+        lines.append(' '.join(current_line))
+
+    return [font.render(line, True, colour) for line in lines]
+
 # actual main game loop
 while running:
     mouse_pos = pygame.mouse.get_pos()
@@ -197,6 +216,13 @@ while running:
                         current_question_index += 1
                     else:
                         game_state = "RESULTS"
+                        highets_score = max(score.values())
+                        tied_winners = [colour for colour, value in score.items() if value == highets_score]
+                        winner_colour = random.choice(tied_winners)
+                        char = character_list[winner_colour]
+                        current_winner = char
+                        wrapped_desc_lines = render_wrapped_text(char['desc'], answer_font, (255,255,255), 1000)
+
                     break
     current_time = pygame.time.get_ticks()
 
@@ -221,34 +247,33 @@ while running:
                 box_thickness = 7
                 text_string = question_list[current_question_index]['answers'][i]['text']
                 display_surf = answer_hover_font.render(text_string, True, (255,255,255))
-                display_rect = dispay_surf.get_rect(center=rect.center)
+                display_rect = display_surf.get_rect(center=rect.center)
 
             else:
                 inflate_x, inflate_y = 40,20
                 box_thickness = 5
-                dispay_surf = surf
+                display_surf = surf
                 display_rect = rect
             pygame.draw.rect(screen, (255,255,255), rect.inflate(inflate_x, inflate_y), width=box_thickness, border_radius=10)
-            screen.blit(dispay_surf, display_rect)
+            screen.blit(display_surf, display_rect)
         
 
     elif game_state == "RESULTS":
-        highets_score = max(score.values())
-        tied_winners = [colour for colour, value in score.items() if value == highets_score]
-        winner_colour = random.choice(tied_winners)
-        char = character_list[winner_colour]
+        
         screen.fill(char['bg_base'])
         bg(*char['bg_tri'])
 
         name_surf = title_font.render(char['name'], True, (255,255,255))
         name_rect = name_surf.get_rect(center=(600,100))
-
-        desc_surf = answer_font.render(char['desc'], True, (255,255,255))
-        desc_rect = desc_surf.get_rect(center=(600,650))
-
         screen.blit(name_surf, name_rect)
-        screen.blit(desc_surf, desc_rect)
 
+        
+        start_y = 620
+        line_height = 60
+
+        for i, single_line in enumerate(wrapped_desc_lines):
+            line_rect = single_line.get_rect(center=(600,start_y + (i * line_height)))
+            screen.blit(single_line, line_rect)
     pygame.display.update()
     clock.tick(60)
 
