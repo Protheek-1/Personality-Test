@@ -20,6 +20,8 @@ score = {
     'green' : 0,
     'yellow' : 0
 }
+TARGET_HEIGHT = 420
+
 # font setup
 title_font = pygame.font.Font('fonts/gorditas.ttf', 120)
 subtitle_font = pygame.font.Font('fonts/gorditas.ttf', 63)
@@ -41,22 +43,26 @@ character_list = {
     'red': {
         'name': 'Ratticus',
         'desc': "Fueled entirely by midnight coffee and chaos, they push buttons just to see sparks.",
-        'bg_base': (240, 140, 140), 'bg_tri': (240, 130, 130)
+        'bg_base': (240, 140, 140), 'bg_tri': (240, 130, 130),
+        'img': pygame.transform.smoothscale((img := pygame.image.load('graphics/Ratticus.webp').convert_alpha()), (int(img.get_width() * (TARGET_HEIGHT / img.get_height())), TARGET_HEIGHT))
     },
     'blue': {
         'name': 'Blargh',
         'desc': 'There are zero thoughts behind those eyes, just baseline survival instincts and immaculate vibes.',
-        'bg_base': (140, 150, 250), 'bg_tri': (130, 140, 250)
+        'bg_base': (140, 150, 250), 'bg_tri': (130, 140, 250),
+        'img': pygame.transform.smoothscale((img := pygame.image.load('graphics/Blargh.webp').convert_alpha()), (int(img.get_width() * (TARGET_HEIGHT / img.get_height())), TARGET_HEIGHT))
     },
     'green': {
         'name': 'Poobert',
         'desc': 'The sensible anchor holding the group together while everyone else creates absolute mayhem.',
-        'bg_base': (180, 240, 160), 'bg_tri': (160, 230, 140)
+        'bg_base': (180, 240, 160), 'bg_tri': (160, 230, 140),
+        'img': pygame.transform.smoothscale((img := pygame.image.load('graphics/Poobert.webp').convert_alpha()), (int(img.get_width() * (TARGET_HEIGHT / img.get_height())), TARGET_HEIGHT))
     },
     'yellow': {
         'name': 'Heidi',
         'desc': 'An unstoppable force of positive energy who treats the whole world like a playground.',
-        'bg_base': (235, 230, 160), 'bg_tri': (230, 220, 120)
+        'bg_base': (235, 230, 160), 'bg_tri': (230, 220, 120),
+        'img': pygame.transform.smoothscale((img := pygame.image.load('graphics/Heidi.webp').convert_alpha()), (int(img.get_width() * (TARGET_HEIGHT / img.get_height())), TARGET_HEIGHT))
     }
 }
 
@@ -117,7 +123,6 @@ question_list = [
         ],
         'bg_base': (170,200,250), 'bg_tri': (164, 194, 250)
     }
-
 ]
 
 
@@ -276,6 +281,10 @@ while running:
         name_surf = title_font.render(char['name'], True, (255,255,255))
         name_rect = name_surf.get_rect(center=(600,100))
         screen.blit(name_surf, name_rect)
+
+        img_surf = char['img']
+        img_rect = img_surf.get_rect(center=(600,380))
+        screen.blit(img_surf, img_rect)
 
         if reload_rect.collidepoint(mouse_pos):
             hover_img = pygame.transform.scale(reload_img, (116,116))
